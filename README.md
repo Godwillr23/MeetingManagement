@@ -7,7 +7,7 @@ Meeting Tool Management Assessment
 Name: Godwill Rikhotso
 
 
-1. Project Website URL- http://godwillrikh23-001-site1.itempurl.com/Help
+1. Project Website URL- http://godwillrikh23-001-site1.itempurl.com
 
 2. Tools and Languages Used: 
 

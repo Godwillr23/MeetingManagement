@@ -1,0 +1,36 @@
+﻿@model ChilliSoft_Assignment.Models.Meeting
+
+@{
+    ViewBag.Title = "Meails Details";
+}
+
+<div class="jumbotron">
+    <div class="form_container">
+        <div>
+            <h4 class="page-header">Meeting Details</h4>
+            <table class="table table-responsive table-condensed">
+                <tr>
+                   <td>Meeting Code:</td>
+                    <td style="text-align:left">@Html.DisplayFor(model => model.MeetingCode)</td>
+                </tr>
+                <tr>
+                    <td>Meeting Date:</td>
+                    <td style="text-align:left">@Html.DisplayFor(model => model.MeetingDate)</td>
+                </tr>
+                <tr>
+                    <td>Meeting Time:</td>
+                    <td style="text-align:left">@Html.DisplayFor(model => model.MeetingTime)</td>
+                </tr>
+                <tr>
+                    <td>Date Created: </td>
+                    <td style="text-align:left">@Html.DisplayFor(model => model.DateCreated)</td>
+                </tr>
+
+            </table>
+        </div>
+        <p>
+           <span class="btn btn-success btn-action"> @Html.ActionLink("Edit", "Edit", new { id = Model.MeetingId })</span>
+            <span class="btn btn-primary btn-action" style="margin-top: 10px;"> @Html.ActionLink("Back to List", "Index")</span>
+        </p>
+    </div>
+</div>

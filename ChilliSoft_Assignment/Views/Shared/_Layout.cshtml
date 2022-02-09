@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @*<link rel="stylesheet" href="../Content/calendarview.css">*@
+    <link href="~/Content/css/fontawesome.min.css" rel="stylesheet" />
+    <link href="~/Content/css/fontawesome.css" rel="stylesheet" />
+    <link href="~/Content/css/solid.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+
+     <style type="text/css">
+
+        .positionTypes {
+            display: inline;
+        }
+
+        footer {
+            color: rgb(180, 180, 180);
+        }
+
+        .disabled {
+            background-color: #ccc !important;
+        }
+
+        .logo {
+            color: #fff;
+            margin-left:0 !important;
+            border:solid 5px #ccc;
+            margin-top: 5px !important;
+            margin-bottom: 5px !important;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: black;
+            z-index: 99;
+            opacity: 0.8;
+            filter: alpha(opacity=80);
+            -moz-opacity: 0.8;
+            min-height: 100%;
+            width: 100%;
+        }
+
+        .loading {
+            font-family: Arial;
+            font-size: 10pt;
+            width: 200px;
+            height: 100px;
+            display: none;
+            position: fixed;
+            background-color: White;
+            z-index: 999;
+        }
+
+        .jumbotron {
+            margin-top:70px;
+            padding-right: 20px !important;
+            padding-left: 20px !important;
+            margin-top: 75px;
+            width: 100%;
+            border: solid 1px #ccc;
+        }
+
+        hr {
+            color:#ccc;
+        }
+
+        .heading {
+            text-align:center;
+            color:midnightblue;
+            font-size:large;
+            font-weight:bold;
+            text-decoration:underline;
+        }
+
+        .form_container {
+            max-width: 600px;
+            margin: auto;
+            border: solid 1px #ccc;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        a {
+            color:#fff;
+        }
+
+        .btn-action {
+            width:100%;
+        }
+
+    </style>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Meeting Track Management", "", "", new { area = "" }, new { @class = "navbar-brand logo" })
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li> @Html.ActionLink("Meetings", "Index", "Meeting", routeValues: null, htmlAttributes: new { title = "Meeting" }) </li>
+                    <li> @Html.ActionLink("Meeting Items", "Index", "MeetingItem", routeValues: null, htmlAttributes: new { title = "MeetingItem" }) </li>
+                    <li> @Html.ActionLink("Statuses", "Index", "ItemStatus", routeValues: null, htmlAttributes: new { title = "ItemStatus" }) </li>
+                    <li> @Html.ActionLink("Staff Members", "Index", "Staff", routeValues: null, htmlAttributes: new { title = "Staff" }) </li>
+                    <li>@Html.ActionLink("Meeting Types", "Index", "MeetingType", routeValues: null, htmlAttributes: new { id = "MeetingType" })</li>
+                    <li>@Html.ActionLink("Report", "Index", "Report", routeValues: null, htmlAttributes: new { id = "Report" })</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <footer style="text-align: center;">
+            <p style="color:#333">&copy; @DateTime.Now.Year - Meeting Track Management</p>
+        </footer>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("Scripts", required: false)
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <script src="~/ReportContent/assets/demo/datatables-demo.js"></script>
+    <script src="~/ReportContent/js/datatables-simple-demo.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<ChilliSoft_Assignment.Models.MeetingItem>
+@{
+    ViewBag.Title = "Meeting Item Report";
+}
+
+
+<div class="jumbotron">
+    <main>
+        <div class="container-fluid px-4">
+            @if (Model.Count() > 0)
+            {
+                <div class="card mb-4">
+                    <div class="card-header">
+                        MEETING ITEMS: @Model.Count().ToString()
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple" class="table table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Meeting Item</th>
+                                    <th>Comment</th>
+                                    <th>Status</th>
+                                    <th>Action By</th>
+                                    <th>Due Date</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Meeting Item</th>
+                                    <th>Comment</th>
+                                    <th>Status</th>
+                                    <th>Action By</th>
+                                    <th>Due Date</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.MeetingItemName</td>
+                                        <td>@item.ItemDescription</td>
+                                        <td>@item.ItemStatus</td>
+                                        <td>@item.ActionBy</td>
+                                        <td>@item.DueDate</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @using (Html.BeginForm("Export", "Report", FormMethod.Post))
+                        {
+                            <input class="btn btn-success" style="float:right" type="submit" value="EXPORT TO FILE" />
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </main>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+
+  
+</script>

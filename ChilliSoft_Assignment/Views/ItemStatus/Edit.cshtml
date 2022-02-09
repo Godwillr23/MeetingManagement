@@ -1,0 +1,37 @@
+﻿@model ChilliSoft_Assignment.Models.Status
+
+@{
+    ViewBag.Title = "Update Item Status";
+}
+
+<div class="jumbotron">
+    <div class="form_container">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Update Item Status</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.StatusItemId)
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <span>Item Status:</span>
+                        @Html.EditorFor(model => model.StatusItem, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.StatusItem, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="submit" value="Save" class="btn btn-success btn-action" />
+                        <span class="btn btn-primary btn-action">@Html.ActionLink("Back to List", "Index")</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

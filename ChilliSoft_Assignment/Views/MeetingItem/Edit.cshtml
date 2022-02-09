@@ -1,0 +1,75 @@
+﻿@model ChilliSoft_Assignment.Models.MeetingItem
+
+@{
+    ViewBag.Title = "Update Meeting Item";
+}
+
+<div class="jumbotron">
+    <div class="form_container">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Update Meeting Item</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ItemId)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.MeetingId)
+
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align:left">
+                        <span>Item Name:</span>
+                        @Html.EditorFor(model => model.MeetingItemName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MeetingItemName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align:left">
+                        <span>Item Description:</span>
+                        @Html.EditorFor(model => model.ItemDescription, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ItemDescription, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align:left">
+                        <span>Meeting Code:</span>
+                        @Html.DropDownListFor(x => x.ItemStatus, ViewData["Status"] as List<SelectListItem>, new { @class = "form-control", id = "MeetingType" })
+                        @Html.ValidationMessageFor(m => m.ItemStatus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align:left">
+                        <span>Action By:</span>
+                        @Html.DropDownListFor(x => x.ActionBy, ViewData["Staff"] as List<SelectListItem>, new { @class = "form-control", id = "MeetingType" })
+                        @Html.ValidationMessageFor(m => m.ActionBy, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align:left"">
+                        <span>Due Date:</span>
+                        @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control", type="date" } })
+                        @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.DateCreated)
+
+                <div class="form-group">
+                    <div class="col-md-12"">
+                        <input type="submit" value="Save" class="btn btn-success btn-action" />
+                        <span class="btn btn-primary btn-action"> @Html.ActionLink("Back to List", "Index")</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

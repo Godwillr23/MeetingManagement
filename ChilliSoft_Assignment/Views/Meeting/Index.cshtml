@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ChilliSoft_Assignment.Models.Meeting>
+@{
+    ViewBag.Title = "Meeting List";
+}
+
+<div class="jumbotron">
+    <h4 class="page-header">Meeting List</h4>
+@if (Model.Count() > 0)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(x => x.MeetingId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x => x.MeetingCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x => x.MeetingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x => x.MeetingTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x => x.DateCreated)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(x => item.MeetingId)
+                </td>
+                <td>
+                    @Html.DisplayFor(x => item.MeetingCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(x => item.MeetingDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(x => item.MeetingTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(x => item.DateCreated)
+                </td>
+                <td>
+                   <span class="btn btn-success"> @Html.ActionLink("Edit", "Edit", new { id = item.MeetingId })</span> |
+                    <span class="btn btn-info"> @Html.ActionLink("Details", "Detail", new { id = item.MeetingId })</span> |
+                    <span class="btn btn-danger"> @Html.ActionLink("Delete", "Delete", new { id = item.MeetingId })</span>
+                </td>
+            </tr>
+        }
+    </table> 
+    }
+    else {
+        <p style="text-align:center; color:red;">No Meeting Found</p>
+    }
+    <p>
+        <span class="btn btn-primary"> @Html.ActionLink("Create Meeting", "Create")</span>
+    </p> 
+
+</div>
+

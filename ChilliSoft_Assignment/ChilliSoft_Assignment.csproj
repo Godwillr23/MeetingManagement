@@ -213,13 +213,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ItemStatusController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
-    <Compile Include="Controllers\MeetingItemController.cs" />
     <Compile Include="Controllers\MeetingTypeController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Migrations\202202090550281_UpdateDatabaseTables.cs" />
     <Compile Include="Migrations\202202090550281_UpdateDatabaseTables.Designer.cs">
       <DependentUpon>202202090550281_UpdateDatabaseTables.cs</DependentUpon>
@@ -243,6 +243,14 @@
     <Compile Include="Migrations\202202090741140_AddStatusTableAndUpdateStaffTable.cs" />
     <Compile Include="Migrations\202202090741140_AddStatusTableAndUpdateStaffTable.Designer.cs">
       <DependentUpon>202202090741140_AddStatusTableAndUpdateStaffTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202202101913242_UpdateStatusTable.cs" />
+    <Compile Include="Migrations\202202101913242_UpdateStatusTable.Designer.cs">
+      <DependentUpon>202202101913242_UpdateStatusTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202202101915546_removeItemIdOnStatusTable.cs" />
+    <Compile Include="Migrations\202202101915546_removeItemIdOnStatusTable.Designer.cs">
+      <DependentUpon>202202101915546_removeItemIdOnStatusTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AllTables.cs" />
@@ -304,11 +312,6 @@
     <Content Include="Views\MeetingType\Create.cshtml" />
     <Content Include="Views\MeetingType\Edit.cshtml" />
     <Content Include="Views\MeetingType\Delete.cshtml" />
-    <Content Include="Views\MeetingItem\Index.cshtml" />
-    <Content Include="Views\MeetingItem\Create.cshtml" />
-    <Content Include="Views\MeetingItem\Edit.cshtml" />
-    <Content Include="Views\MeetingItem\Detail.cshtml" />
-    <Content Include="Views\MeetingItem\Delete.cshtml" />
     <Content Include="Views\ItemStatus\Index.cshtml" />
     <Content Include="Views\ItemStatus\Create.cshtml" />
     <Content Include="Views\ItemStatus\Edit.cshtml" />
@@ -318,6 +321,13 @@
     <Content Include="Views\Staff\Edit.cshtml" />
     <Content Include="Views\Staff\Delete.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Meeting\MeetingItems.cshtml" />
+    <Content Include="Views\Meeting\CreateMeetingItem.cshtml" />
+    <Content Include="Views\Meeting\EditMeetingItem.cshtml" />
+    <Content Include="Views\Meeting\MeetingItemHistory.cshtml" />
+    <Content Include="Views\Meeting\DeleteMeetingItem.cshtml" />
+    <Content Include="Views\Meeting\AddNewStatus.cshtml" />
+    <Content Include="Views\Meeting\PreviousMeeting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -357,6 +367,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202202090741140_AddStatusTableAndUpdateStaffTable.resx">
       <DependentUpon>202202090741140_AddStatusTableAndUpdateStaffTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202202101913242_UpdateStatusTable.resx">
+      <DependentUpon>202202101913242_UpdateStatusTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202202101915546_removeItemIdOnStatusTable.resx">
+      <DependentUpon>202202101915546_removeItemIdOnStatusTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

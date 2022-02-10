@@ -46,6 +46,4 @@ CREATE TABLE [dbo].[Status](
 	[Status] [varchar](100) NOT NULL
 )
 
---https://www.c-sharpcorner.com/article/crud-application-in-asp-net-mvc/
-
 --update-database -verbose -force

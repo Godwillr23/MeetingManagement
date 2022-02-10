@@ -53,9 +53,9 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="col-md-12" style="text-align:left"">
+                    <div class="col-md-12" style="text-align:left">
                         <span>Due Date:</span>
-                        @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control", type="date" } })
+                        @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
                         @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -64,9 +64,9 @@
                 @Html.HiddenFor(model => model.DateCreated)
 
                 <div class="form-group">
-                    <div class="col-md-12"">
+                    <div class="col-md-12">
                         <input type="submit" value="Save" class="btn btn-success btn-action" />
-                        <span class="btn btn-primary btn-action"> @Html.ActionLink("Back to List", "Index")</span>
+                        <span class="btn btn-primary btn-action" onclick="history.back()">Back to List</span>
                     </div>
                 </div>
             </div>

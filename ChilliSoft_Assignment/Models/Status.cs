@@ -10,7 +10,6 @@ namespace ChilliSoft_Assignment.Models
     {
         [Key]
         public int StatusItemId { get; set; }
-
         [Required(AllowEmptyStrings = false, ErrorMessage = "Status is required.")]
         public string StatusItem { get; set; }
     }

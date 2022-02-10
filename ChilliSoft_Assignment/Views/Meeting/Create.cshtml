@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <div class="col-md-12" style="text-align:left">
                         <span>Meeting Code:</span>
-                        @Html.DropDownListFor(x => x.MeetingCode, ViewData["MeetingCode"] as List<SelectListItem>, "-Select Meeting Type-", new { @class = "form-control", id = "MeetingType" })
+                        @Html.DropDownListFor(x => x.MeetingCode, ViewData["MeetingCode"] as List<SelectListItem>, " ", new { @class = "form-control", id = "MeetingType" })
                         @Html.ValidationMessageFor(m => m.MeetingCode, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -41,7 +41,7 @@
 
                 <div class="form-group">
                         <div class="col-md-12">
-                            <input type="submit" value="Create" class="btn btn-success btn-action" />
+                            <input type="submit" value="Proceed" class="btn btn-success btn-action" />
                             <span class="btn btn-primary btn-action"> @Html.ActionLink("Back to List", "Index") </span>
                         </div>
                 </div>

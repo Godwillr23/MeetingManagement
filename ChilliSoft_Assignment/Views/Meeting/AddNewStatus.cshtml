@@ -1,0 +1,60 @@
+﻿@model ChilliSoft_Assignment.Models.MeetingItem
+
+@{
+    ViewBag.Title = "Add Status";
+}
+
+<div class="jumbotron">
+    <div class="form_container">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Add New Status</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ItemId)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.MeetingId)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ActionBy)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.DueDate)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ItemDescription)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.DateCreated)
+
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align:left">
+                        <span>Item Name:</span>
+                        @Html.EditorFor(model => model.MeetingItemName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.MeetingItemName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align:left">
+                        <span>Meeting Code:</span>
+                        @Html.DropDownListFor(x => x.ItemStatus, ViewData["Status"] as List<SelectListItem>, "-Select New Status-", new { @class = "form-control", id = "Status" })
+                        @Html.ValidationMessageFor(m => m.ItemStatus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="submit" value="Save" class="btn btn-success btn-action" />
+                        <span class="btn btn-primary btn-action" onclick="history.back()">Back to List</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

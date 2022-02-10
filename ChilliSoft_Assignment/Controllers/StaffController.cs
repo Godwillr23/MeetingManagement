@@ -30,8 +30,15 @@ namespace ChilliSoft_Assignment.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Staffs.Add(model);
-                _context.SaveChanges();
+                try
+                {
+                    _context.Staffs.Add(model);
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException);
+                }
                 return RedirectToAction("Index");
             }
             return View(model);
@@ -58,8 +65,16 @@ namespace ChilliSoft_Assignment.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Entry(model).State = EntityState.Modified;
-                _context.SaveChanges();
+                try
+                {
+                    _context.Entry(model).State = EntityState.Modified;
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException);
+                }
+
                 return RedirectToAction("Index");
             }
 
@@ -84,9 +99,17 @@ namespace ChilliSoft_Assignment.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var staff = _context.Staffs.SingleOrDefault(x => x.StaffId == id);
-            _context.Staffs.Remove(staff);
-            _context.SaveChanges();
+            try
+            {
+                var staff = _context.Staffs.SingleOrDefault(x => x.StaffId == id);
+                _context.Staffs.Remove(staff);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+
             return RedirectToAction("Index");
         }
     }

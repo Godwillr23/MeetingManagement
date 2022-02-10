@@ -18,18 +18,28 @@ namespace ChilliSoft_Assignment.Controllers
             var meeting_type = _context.MeetingTypes.ToList();
             return View(meeting_type);
         }
-        // Get  
+        
         public ActionResult Create()
         {
             return View();
         }
+
+        // Add Meeting Type  
         [HttpPost]
         public ActionResult Create(MeetingType model)
         {
             if (ModelState.IsValid)
             {
-                _context.MeetingTypes.Add(model);
-                _context.SaveChanges();
+                try
+                {
+                    _context.MeetingTypes.Add(model);
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException);
+                }
+
                 return RedirectToAction("Index");
             }
             return View(model);
@@ -49,13 +59,22 @@ namespace ChilliSoft_Assignment.Controllers
             return View(meeting_type);
         }
 
+        //Update Meeting Type
         [HttpPost]
         public ActionResult Edit(MeetingType model)
         {
             if (ModelState.IsValid)
             {
-                _context.Entry(model).State = EntityState.Modified;
-                _context.SaveChanges();
+                try
+                {
+                    _context.Entry(model).State = EntityState.Modified;
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException);
+                }
+
                 return RedirectToAction("Index");
             }
 
@@ -77,12 +96,21 @@ namespace ChilliSoft_Assignment.Controllers
             return View(meeting_type);
         }
 
+        //Remove meeting type
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var meetingtype = _context.MeetingTypes.SingleOrDefault(x => x.MeetingTypeId == id);
-            _context.MeetingTypes.Remove(meetingtype);
-            _context.SaveChanges();
+            try
+            {
+                var meetingtype = _context.MeetingTypes.SingleOrDefault(x => x.MeetingTypeId == id);
+                _context.MeetingTypes.Remove(meetingtype);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+
             return RedirectToAction("Index");
         }
     }

@@ -9,9 +9,9 @@
 {
     <table class="table">
         <tr>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(x => x.MeetingId)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(x => x.MeetingCode)
             </th>
@@ -29,9 +29,9 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                @*<td>
                     @Html.DisplayFor(x => item.MeetingId)
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(x => item.MeetingCode)
                 </td>
@@ -46,7 +46,7 @@
                 </td>
                 <td>
                    <span class="btn btn-success"> @Html.ActionLink("Edit", "Edit", new { id = item.MeetingId })</span> |
-                    <span class="btn btn-info"> @Html.ActionLink("Details", "Detail", new { id = item.MeetingId })</span> |
+                    <span class="btn btn-info"> @Html.ActionLink("Meeting Items", "MeetingItems", new { id = item.MeetingId })</span> |
                     <span class="btn btn-danger"> @Html.ActionLink("Delete", "Delete", new { id = item.MeetingId })</span>
                 </td>
             </tr>

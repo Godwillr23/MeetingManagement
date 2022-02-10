@@ -1,4 +1,5 @@
-﻿using ChilliSoft_Assignment.Models;
+﻿using ChilliSoft_Assignment.Helpers;
+using ChilliSoft_Assignment.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -12,8 +13,9 @@ namespace ChilliSoft_Assignment.Controllers
     public class MeetingController : Controller
     {
         private readonly DataContext _context = new DataContext();
+        Helper helper = new Helper();
 
-        // GET: Meeting
+        // Get Meeting
         public ActionResult Index()
         {
             var meetings = _context.Meetings.ToList();
@@ -35,19 +37,55 @@ namespace ChilliSoft_Assignment.Controllers
             ViewBag.MeetingCode = meeting_type;
         }
 
-        //Get last added ID
-        public int getLastAddedMeetingID(string meeting) {
+        //Method to get meeting Type
+        public void GetMeeting()
+        {
+            // Create db context object here
+            //Get the value from database and then set it to ViewBag to pass it View
+            List<SelectListItem> meeting_type = _context.Meetings.OrderBy(x => x.MeetingCode).Select(c => new SelectListItem
+            {
+                Value = c.MeetingId.ToString(),
+                Text = c.MeetingCode
 
-            int id = _context.Meetings.
-                Where(r => r.MeetingCode.StartsWith(meeting)).
-                Select(c => c.MeetingId).Count();
+            }).ToList();
 
-            return id + 1;
+            ViewBag.MeetingCode = meeting_type;
+        }
+
+        //Method to get Statuses List
+        public void GetStatus()
+        {
+            // Create db context object here
+            //Get the value from database and then set it to ViewBag to pass it View
+            List<SelectListItem> status = _context.Statuses.OrderBy(x => x.StatusItem).Select(c => new SelectListItem
+            {
+                Value = c.StatusItem,
+                Text = c.StatusItem
+
+            }).ToList();
+
+            ViewBag.Status = status;
+        }
+
+        //Method to get Staff Member
+        public void GetStaff()
+        {
+            // Create db context object here
+            //Get the value from database and then set it to ViewBag to pass it View
+            List<SelectListItem> staff = _context.Staffs.OrderBy(x => x.Firstname).Select(c => new SelectListItem
+            {
+                Value = c.Firstname.Substring(0, 1).ToUpper() + c.Lastname.Substring(0, 1).ToUpper(),
+                Text = c.Firstname + "," + c.Lastname
+
+            }).ToList();
+
+            ViewBag.Staff = staff;
         }
 
         //Create New Meeting
         public ActionResult Create()
         {
+            Session.Remove("MeetingID");
             GetMeetingType();
             return View();
         }
@@ -55,20 +93,120 @@ namespace ChilliSoft_Assignment.Controllers
         public ActionResult Create(Meeting model)
         {
             //GetMeetingType();
+
             if (ModelState.IsValid)
             {
-                string code = model.MeetingCode.Substring(0,1);
-                int lastId = getLastAddedMeetingID(code);
-                
-                model.MeetingCode = code + lastId;
-                model.DateCreated = DateTime.Now.Date;
+                try
+                {
+                    string code = helper.firstLetterWord(model.MeetingCode);
+                    int lastId = helper.getLastAddedMeetingID(code);
 
-                _context.Meetings.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
+                    //calculation to get the previous saved MeetingCode
+                    // int prevCodeId = lastId - 1;
+                    int previousId = helper.getPreviousMeetingId(code);
+
+                    model.MeetingCode = code + lastId;
+                    model.DateCreated = DateTime.Now.Date;
+
+                    _context.Meetings.Add(model);
+                    _context.SaveChanges();
+
+                    Session["MeetingID"] = model.MeetingId;
+
+                    //Open the meeting Item screen with previous meeting Items.
+                    if (helper.checkMeetingCode(code) > 0)
+                    {
+                        return RedirectToAction("PreviousMeeting", "Meeting", new { id = previousId });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Meeting");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException);
+                }
             }
+            else {
+                GetMeetingType();
+            }
+
             return View(model);
         }
+
+        //display previous meeting to be carried forward
+        public ActionResult PreviousMeeting(int? id)
+        {
+            Session["MeetingID"] = id;
+            var meeting_items = _context.MeetingItems.Where(x => x.MeetingId == id).ToList();
+            return View(meeting_items);
+        }
+
+        //check if meeting Item is selected
+        public bool checkIfSelected(string id, FormCollection collection) {
+            bool chckbox = collection[id] != null ? true : false;
+
+            return chckbox;
+        }
+
+        // Create meeting using carried forward Meeting Items
+        [HttpPost]
+        public ActionResult AddPreviousMeetingItems(List<MeetingItem> model, FormCollection collection)
+        {
+            int id = Convert.ToInt32(Session["MeetingID"].ToString());
+            
+
+            if (ModelState.IsValid)
+            {
+                MeetingItem meetingitem = new MeetingItem();
+                try
+                {
+
+                    //Check for NULL.
+                    if (model == null)
+                    {
+                        model = new List<MeetingItem>();
+                    }
+
+                    //Loop and insert records.
+                    foreach (var data in model)
+                    {
+                        bool isSelected = checkIfSelected("id" + data.ItemId, collection);
+
+                        if (isSelected)
+                        {
+                            meetingitem.MeetingId = id;
+                            meetingitem.MeetingItemName = data.MeetingItemName;
+                            meetingitem.ItemDescription = data.ItemDescription;
+                            meetingitem.ItemStatus = data.ItemStatus;
+                            meetingitem.DueDate = data.DueDate;
+                            meetingitem.DateCreated = data.DateCreated;
+
+                            _context.MeetingItems.Add(meetingitem);
+                            _context.SaveChanges();
+
+                        }
+                    }
+
+                    return Json(meetingitem);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException.Message);
+               }
+            }
+
+            return RedirectToAction("PreviousMeeting", "Meeting", new { id = id });
+        }
+
+        public ActionResult CarriedForwardItems(int? id)
+        {
+            var meeting_items = _context.MeetingItems.Where(x => x.MeetingId == id).ToList();
+            return View(meeting_items);
+        }
+
 
         //Update meeting details
         public ActionResult Edit(int? id)
@@ -91,8 +229,15 @@ namespace ChilliSoft_Assignment.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Entry(model).State = EntityState.Modified;
-                _context.SaveChanges();
+                try
+                {
+                    _context.Entry(model).State = EntityState.Modified;
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException);
+                }
                 return RedirectToAction("Index");
             }
 
@@ -134,10 +279,207 @@ namespace ChilliSoft_Assignment.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var meeting = _context.Meetings.SingleOrDefault(x => x.MeetingId == id);
-            _context.Meetings.Remove(meeting);
-            _context.SaveChanges();
+            try
+            {
+                var meeting = _context.Meetings.SingleOrDefault(x => x.MeetingId == id);
+                _context.Meetings.Remove(meeting);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+
             return RedirectToAction("Index");
+        }
+
+        //End Meeting
+
+            // Start Meeting Items
+        public ActionResult MeetingItems(int? id)
+        {
+            Session["MeetingID"] = id;
+            var meeting_items = _context.MeetingItems.Where(x => x.MeetingId == id).ToList();
+            return View(meeting_items);
+        }
+
+        //Save Status for each Item on Create and Update
+        public void SaveItemStatus(int itemId, string status)
+        {
+            try
+            {
+
+                MeetingItemStatus itemstatus = new MeetingItemStatus();
+                itemstatus.ItemId = itemId;
+                itemstatus.Status = status;
+
+                _context.MeetingItemStatuses.Add(itemstatus);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+        }
+
+        
+        public ActionResult CreateMeetingItem()
+        {
+            GetStatus();
+            GetStaff();
+            GetMeeting();
+            return View();
+        }
+
+        //Add new Meeting Item
+        [HttpPost]
+        public ActionResult CreateMeetingItem(MeetingItem model)
+        {
+            int meetingid = Convert.ToInt32(Session["MeetingID"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    model.MeetingId = meetingid;
+
+                    if (ModelState.IsValid)
+                    {
+                        model.DateCreated = DateTime.Now.Date;
+
+                        _context.MeetingItems.Add(model);
+                        _context.SaveChanges();
+
+                        SaveItemStatus(model.ItemId, model.ItemStatus);
+                        return RedirectToAction("MeetingItems", new { id = meetingid });
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException);
+                }
+            }
+            else {
+                GetStatus();
+                GetStaff();
+                GetMeeting();
+            }
+
+            return View(model);
+        }
+
+        public ActionResult AddNewStatus(int? id)
+        {
+            GetStatus();
+            GetStaff();
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var meeting_items = _context.MeetingItems.SingleOrDefault(e => e.ItemId == id);
+            if (meeting_items == null)
+            {
+                return HttpNotFound();
+            }
+            return View(meeting_items);
+        }
+
+        //Add new Status for the Item
+        [HttpPost]
+        public ActionResult AddNewStatus(MeetingItem model)
+        {
+            int meetingid = Convert.ToInt32(Session["MeetingID"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                _context.Entry(model).State = EntityState.Modified;
+                _context.SaveChanges();
+
+                SaveItemStatus(model.ItemId, model.ItemStatus);
+                return RedirectToAction("MeetingItems", new { id = meetingid });
+            }
+
+            return View(model);
+        }
+
+        public ActionResult EditMeetingItem(int? id)
+        {
+            GetStatus();
+            GetStaff();
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var meeting_items = _context.MeetingItems.SingleOrDefault(e => e.ItemId == id);
+            if (meeting_items == null)
+            {
+                return HttpNotFound();
+            }
+            return View(meeting_items);
+        }
+
+        //Update Meeting Item
+        [HttpPost]
+        public ActionResult EditMeetingItem(MeetingItem model)
+        {
+            int meetingid = Convert.ToInt32(Session["MeetingID"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                _context.Entry(model).State = EntityState.Modified;
+                _context.SaveChanges();
+
+                return RedirectToAction("MeetingItems", new { id = meetingid });
+            }
+
+            return View(model);
+        }
+        public ActionResult MeetingItemHistory(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var meeting_items = _context.MeetingItems.SingleOrDefault(e => e.ItemId == id);
+            if (meeting_items == null)
+            {
+                return HttpNotFound();
+            }
+            return View(meeting_items);
+        }
+        public ActionResult DeleteMeetingItem(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var meeting_items = _context.MeetingItems.SingleOrDefault(e => e.ItemId == id);
+            if (meeting_items == null)
+            {
+                return HttpNotFound();
+            }
+            return View(meeting_items);
+        }
+
+        //Delete Meeting Item
+        [HttpPost]
+        public ActionResult DeleteMeetingItem(int id)
+        {
+            int meetingid = Convert.ToInt32(Session["MeetingID"].ToString());
+
+            var status = _context.Statuses.SingleOrDefault(x => x.StatusItemId == id);
+            _context.Statuses.Remove(status);
+            _context.SaveChanges();
+
+            return RedirectToAction("MeetingItems", new { id = meetingid });
         }
     }
 }

@@ -4,6 +4,17 @@
     ViewBag.Title = "Detail";
 }
 
+@functions{
+    public List<ChilliSoft_Assignment.Models.MeetingItemStatus> GetStatusHistory(int id)
+    {
+        ChilliSoft_Assignment.Models.DataContext _context = new ChilliSoft_Assignment.Models.DataContext();
+
+        var status = _context.MeetingItemStatuses.Where(x => x.ItemId == id).ToList();
+
+        return status;
+    }
+}
+
 <h2>Detail</h2>
 
 <div class="jumbotron">
@@ -19,6 +30,18 @@
                 <tr>
                     <td>Description:</td>
                     <td style="text-align:left">@Html.DisplayFor(model => model.ItemDescription)</td>
+                </tr>
+                <tr style="background-color:lightyellow">
+                    <td>Status History:</td>
+                    <td style="text-align:left">
+                        <ul>
+                            @foreach (var status in GetStatusHistory(Model.ItemId))
+                            {
+                               <li>@status.Status</li>
+                            }
+                        </ul>
+
+                    </td>
                 </tr>
 
                 <tr>
@@ -39,8 +62,8 @@
             </table>
         </div>
         <p>
-            <span class="btn btn-success btn-action"> @Html.ActionLink("Edit", "Edit", new { id = Model.MeetingId })</span>
-            <span class="btn btn-primary btn-action" style="margin-top: 10px;"> @Html.ActionLink("Back to List", "Index")</span>
+            @*<span class="btn btn-success btn-action"> @Html.ActionLink("Edit", "EditMeetingItems", new { id = Model.MeetingId })</span>*@
+            <span class="btn btn-primary btn-action" onclick="history.back()">Back to List</span> 
         </p>
     </div>
 </div>

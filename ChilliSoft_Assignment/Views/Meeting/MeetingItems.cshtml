@@ -28,10 +28,10 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <td style="max-width:200px">
                         @Html.DisplayFor(modelItem => item.MeetingItemName)
                     </td>
-                    <td style="max-width:250px">
+                    <td style="max-width:200px">
                         @Html.DisplayFor(modelItem => item.ItemDescription)
                     </td>
                     <td>
@@ -41,9 +41,10 @@
                         @Html.DisplayFor(modelItem => item.DueDate)
                     </td>
                     <td>
-                        <span class="btn btn-success"> @Html.ActionLink("Edit", "Edit", new { id = item.ItemId })</span> |
-                        <span class="btn btn-info"> @Html.ActionLink("Details", "Detail", new { id = item.ItemId })</span> |
-                        <span class="btn btn-danger"> @Html.ActionLink("Delete", "Delete", new { id = item.ItemId })</span>
+                        <span class="btn btn-primary"> @Html.ActionLink("Add New Status", "AddNewStatus", new { id = item.ItemId })</span> |
+                        <span class="btn btn-success"> @Html.ActionLink("Edit", "EditMeetingItem", new { id = item.ItemId })</span> |
+                        <span class="btn btn-info"> @Html.ActionLink("History", "MeetingItemHistory", new { id = item.ItemId })</span> |
+                        <span class="btn btn-danger"> @Html.ActionLink("Delete", "DeleteMeetingItem", new { id = item.ItemId })</span>
                     </td>
                 </tr>
             }
@@ -54,7 +55,8 @@
         <p style="text-align:center; color:red;">No Meeting Item Found</p>
     }
     <p>
-        <span class="btn btn-primary"> @Html.ActionLink("Add Meeting Item", "Create")</span>
+        <span class="btn btn-success"> @Html.ActionLink("Add Meeting Item", "CreateMeetingItem")</span> |
+        <span class="btn btn-primary"> @Html.ActionLink("Back to Meetings", "Index", "Meeting", routeValues: null, htmlAttributes: new { title = "Meeting" })</span>
     </p>
 
 </div>

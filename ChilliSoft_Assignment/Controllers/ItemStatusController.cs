@@ -19,24 +19,34 @@ namespace ChilliSoft_Assignment.Controllers
             var meeting_status = _context.Statuses.ToList();
             return View(meeting_status);
         }
-        // Add Status   
+          
         public ActionResult Create()
         {
             return View();
         }
+
+        // Add Status 
         [HttpPost]
         public ActionResult Create(Status model)
         {
             if (ModelState.IsValid)
             {
-                _context.Statuses.Add(model);
-                _context.SaveChanges();
+                try
+                {
+                    _context.Statuses.Add(model);
+                    _context.SaveChanges();
+                    
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException);
+                }
+
                 return RedirectToAction("Index");
             }
             return View(model);
         }
-
-        //Update Status
+    
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -52,20 +62,29 @@ namespace ChilliSoft_Assignment.Controllers
             return View(meeting_status);
         }
 
+        //Update Status
         [HttpPost]
         public ActionResult Edit(Status model)
         {
             if (ModelState.IsValid)
             {
-                _context.Entry(model).State = EntityState.Modified;
-                _context.SaveChanges();
+                try
+                {
+                    _context.Entry(model).State = EntityState.Modified;
+                    _context.SaveChanges();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException);
+                }
+
                 return RedirectToAction("Index");
             }
 
             return View(model);
         }
 
-        //Delete Status
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -80,13 +99,22 @@ namespace ChilliSoft_Assignment.Controllers
             }
             return View(meeting_status);
         }
-
+        //Delete Status
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var status = _context.Statuses.SingleOrDefault(x => x.StatusItemId == id);
-            _context.Statuses.Remove(status);
-            _context.SaveChanges();
+            try
+            {
+                var status = _context.Statuses.SingleOrDefault(x => x.StatusItemId == id);
+                _context.Statuses.Remove(status);
+                _context.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+
             return RedirectToAction("Index");
         }
     }

@@ -208,3 +208,4 @@ C:\Users\Laptop-90\source\repos\Godwillr23\MeetingManagement\ChilliSoft_Assignme
 C:\Users\Laptop-90\source\repos\Godwillr23\MeetingManagement\ChilliSoft_Assignment\obj\Debug\ChilliSoft_Assignment.pdb
 C:\Users\Laptop-90\source\repos\Godwillr23\MeetingManagement\ChilliSoft_Assignment\obj\Debug\ChilliSoft_Assignment.Migrations.UpdateStatusTable.resources
 C:\Users\Laptop-90\source\repos\Godwillr23\MeetingManagement\ChilliSoft_Assignment\obj\Debug\ChilliSoft_Assignment.Migrations.removeItemIdOnStatusTable.resources
+C:\Users\Laptop-90\source\repos\Godwillr23\MeetingManagement\ChilliSoft_Assignment\obj\Debug\ChilliSoft_Assignment.Migrations.AddCheckboxField.resources

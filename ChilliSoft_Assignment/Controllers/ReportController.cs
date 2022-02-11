@@ -26,8 +26,6 @@ namespace ChilliSoft_Assignment.Controllers
         [HttpPost]
         public FileResult Export()
         {
-            try
-            {
                 DataTable dt = new DataTable("Grid");
                 dt.Columns.AddRange(new DataColumn[5] { new DataColumn("MeetingItemName"),
                                             new DataColumn("ItemDescription"),
@@ -52,7 +50,7 @@ namespace ChilliSoft_Assignment.Controllers
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "MeetingItems.xlsx");
                     }
                 }
-            }
+            
         }
     }
 }

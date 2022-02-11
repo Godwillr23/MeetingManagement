@@ -252,12 +252,17 @@
     <Compile Include="Migrations\202202101915546_removeItemIdOnStatusTable.Designer.cs">
       <DependentUpon>202202101915546_removeItemIdOnStatusTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202202110727220_AddCheckboxField.cs" />
+    <Compile Include="Migrations\202202110727220_AddCheckboxField.Designer.cs">
+      <DependentUpon>202202110727220_AddCheckboxField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AllTables.cs" />
     <Compile Include="Models\DataContext.cs" />
     <Compile Include="Models\Meeting.cs" />
     <Compile Include="Models\MeetingItem.cs" />
     <Compile Include="Models\MeetingItemStatus.cs" />
+    <Compile Include="Models\MeetingItemViewModel.cs" />
     <Compile Include="Models\MeetingType.cs" />
     <Compile Include="Models\Staff.cs" />
     <Compile Include="Models\Status.cs" />
@@ -373,6 +378,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202202101915546_removeItemIdOnStatusTable.resx">
       <DependentUpon>202202101915546_removeItemIdOnStatusTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202202110727220_AddCheckboxField.resx">
+      <DependentUpon>202202110727220_AddCheckboxField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

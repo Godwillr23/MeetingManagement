@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -139,66 +140,45 @@ namespace ChilliSoft_Assignment.Controllers
         //display previous meeting to be carried forward
         public ActionResult PreviousMeeting(int? id)
         {
-            Session["MeetingID"] = id;
+            //Session["MeetingID"] = id;
             var meeting_items = _context.MeetingItems.Where(x => x.MeetingId == id).ToList();
             return View(meeting_items);
         }
 
-        //check if meeting Item is selected
-        public bool checkIfSelected(string id, FormCollection collection) {
-            bool chckbox = collection[id] != null ? true : false;
-
-            return chckbox;
-        }
-
         // Create meeting using carried forward Meeting Items
-        [HttpPost]
-        public ActionResult AddPreviousMeetingItems(List<MeetingItem> model, FormCollection collection)
+
+        public JsonResult AddMeetingItems(List<MeetingItem> model)
         {
             int id = Convert.ToInt32(Session["MeetingID"].ToString());
+
+            MeetingItem entities = new MeetingItem();
             
-
-            if (ModelState.IsValid)
-            {
-                MeetingItem meetingitem = new MeetingItem();
-                try
+                //Check for NULL.
+                if (model == null)
                 {
-
-                    //Check for NULL.
-                    if (model == null)
-                    {
-                        model = new List<MeetingItem>();
-                    }
-
-                    //Loop and insert records.
-                    foreach (var data in model)
-                    {
-                        bool isSelected = checkIfSelected("id" + data.ItemId, collection);
-
-                        if (isSelected)
-                        {
-                            meetingitem.MeetingId = id;
-                            meetingitem.MeetingItemName = data.MeetingItemName;
-                            meetingitem.ItemDescription = data.ItemDescription;
-                            meetingitem.ItemStatus = data.ItemStatus;
-                            meetingitem.DueDate = data.DueDate;
-                            meetingitem.DateCreated = data.DateCreated;
-
-                            _context.MeetingItems.Add(meetingitem);
-                            _context.SaveChanges();
-
-                        }
-                    }
-
-                    return Json(meetingitem);
+                    model = new List<MeetingItem>();
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.InnerException.Message);
-               }
-            }
 
-            return RedirectToAction("PreviousMeeting", "Meeting", new { id = id });
+                //Loop and insert records.
+                foreach (var item in model)
+                {
+
+                    entities.MeetingId = id;
+                    entities.MeetingItemName = Regex.Replace(item.MeetingItemName, @"\n", "").Trim();
+                    entities.ItemDescription = Regex.Replace(item.ItemDescription, @"\n", "").Trim();
+                    entities.ActionBy = Regex.Replace(item.ActionBy, @"\n", "").Trim();
+                    entities.ItemStatus = Regex.Replace(item.ItemStatus, @"\n", "").Trim();
+                    entities.DueDate = Regex.Replace(item.DueDate, @"\n", "").Trim();
+                    entities.isSelected = false;
+                    entities.DateCreated = DateTime.Now.Date;                   
+
+                    _context.MeetingItems.Add(entities);
+                    _context.SaveChanges();
+                    SaveItemStatus(entities.ItemId, entities.ItemStatus);
+                }
+
+            return Json(entities);
+
         }
 
         public ActionResult CarriedForwardItems(int? id)

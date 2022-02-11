@@ -27,5 +27,7 @@ namespace ChilliSoft_Assignment.Models
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Due Date is required.")]
         public string DueDate { get; set; }
+
+        public bool isSelected { get; set; }
     }
 }

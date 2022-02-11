@@ -4,106 +4,166 @@
     ViewBag.Title = "Meeting Items";
 }
 
-@functions{
-    public string GetMeetingCode(int id)
-    {
-        ChilliSoft_Assignment.Models.DataContext _context = new ChilliSoft_Assignment.Models.DataContext();
-
-        var code = _context.Meetings.Where(x => x.MeetingId == id).FirstOrDefault();
-
-        return code.MeetingCode;
-    }
-}
-
 <div class="jumbotron">
  <h4 class="page-header">Previous Meeting Items</h4>
+
 @using (Html.BeginForm())
 {
-    if (Model.Count() > 0)
-    {
         <table id="tblMeetingItems" class="table" >
-            <tr>
-                <th>
-                   Meeting Code
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.MeetingItemName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ItemDescription)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ItemStatus)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DueDate)
-                </th>
-                <th style="text-align:center">Select Item</th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
+            <thead>
                 <tr>
-                    <td>
-                        @GetMeetingCode(item.MeetingId)
-                    </td>
-                    <td style="max-width:200px">
-                        @Html.DisplayFor(modelItem => item.MeetingItemName)
-                    </td>
-                    <td style="max-width:200px">
-                        @Html.DisplayFor(modelItem => item.ItemDescription)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ItemStatus)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DueDate)
-                    </td>            
-                    <td style="text-align:center">
-                        <input type="checkbox" name="id+@item.ItemId" id="id+@item.ItemId" style="width:30px; height:30px" />
-                    </td>
+                    <th>
+                        Item Name
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        ActionBy
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Due Date
+                    </th>
+                    <th>Select Item</th>
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (ChilliSoft_Assignment.Models.MeetingItem item in Model)
+                {
+                    <tr>
+                        <td style="max-width:200px">
+                            @item.MeetingItemName.ToString()
+                        </td>
+                        <td style="max-width:200px">
+                            @item.ItemDescription.ToString()
+                        </td>
+                        <td>
+                            @item.ActionBy.ToString()
+                        </td>
+                        <td>
+                            @item.ItemStatus.ToString()
+                        </td>
+                        <td>
+                            @item.DueDate.ToString()
+                        </td>
+                        <td>
+                        <input class="btn btn-danger" type="button" value="Remove" onclick="Remove(this)" />
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><input class="form-control" type="text" id="MeetingItemName" placeholder="Meeting Item Name" /></td>
+                    <td><input class="form-control" type="text" id="ItemDescription" placeholder="Description"/></td>
+                    <td><input class="form-control" type="text" id="ActionBy" placeholder="Action By"/></td>
+                    <td><input class="form-control" type="text" id="ItemStatus" placeholder="Status"/></td>
+                    <td><input class="form-control" type="date" id="DueDate" placeholder="Due Date"/></td>
+                    <td><input class="btn btn-primary" type="button" id="btnAdd" value="Add" /></td>
+                </tr>
+            </tfoot>
         </table>
         <p>
             <input type="submit" id="btnSave" value="Create Meeting" class="btn btn-success" />
-            @*<span class="btn btn-success"> @Html.ActionLink("Create Meeting", "CreateMeetingItem")</span>*@ 
         </p>
-    }
-    else
-    {
-        <p style="text-align:center; color:red;">No Meeting Item Found</p>
-        <br/>
-        <p>
-            <span class="btn btn-primary"> @Html.ActionLink("Back to Meetings", "Index", "Meeting", routeValues: null, htmlAttributes: new { title = "Meeting" })</span>
-        </p>
-    }
-
 }
 </div>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
 <script>
+
+    $("body").on("click", "#btnAdd", function () {
+        //Reference the Name and Country TextBoxes.
+        var txtMeetingItemName = $("#MeetingItemName");
+        var txtItemDescription = $("#ItemDescription");
+        var txtActionBy = $("#ActionBy");
+        var txtItemStatus = $("#ItemStatus");
+        var txtDueDate = $("#DueDate");
+
+        //Get the reference of the Table's TBODY element.
+        var tBody = $("#tblMeetingItems > TBODY")[0];
+
+        //Add Row.
+        var row = tBody.insertRow(-1);
+
+        //Add txtMeetingItemName cell.
+        var cell = $(row.insertCell(-1));
+        cell.html(txtMeetingItemName.val());
+
+        //Add txtItemDescription cell.
+        cell = $(row.insertCell(-1));
+        cell.html(txtItemDescription.val());
+
+        //Add ActionBy cell.
+        cell = $(row.insertCell(-1));
+        cell.html(txtActionBy.val());
+
+        //Add txtItemStatus cell.
+        cell = $(row.insertCell(-1));
+        cell.html(txtItemStatus.val());
+
+        //Add txtDueDate cell.
+        cell = $(row.insertCell(-1));
+        cell.html(txtDueDate.val());
+
+        //Add Button cell.
+        cell = $(row.insertCell(-1));
+        var btnRemove = $("<input class='btn btn-danger' />");
+        btnRemove.attr("type", "button");
+        btnRemove.attr("onclick", "Remove(this);");
+        btnRemove.val("Remove");
+        cell.append(btnRemove);
+
+        //Clear the TextBoxes.
+        txtMeetingItemName.val("");
+        txtItemDescription.val("");
+        txtActionBy.val("");
+        txtItemStatus.val("");
+        txtDueDate.val("");
+    });
+
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).html();
+        if (confirm("Do you want to delete: " + name)) {
+            //Get the reference of the Table.
+            var table = $("#tblMeetingItems")[0];
+
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+
     $("body").on("click", "#btnSave", function () {
     //Loop through the Table rows and build a JSON array.
-    var customers = new Array();
+        var meetingItems = new Array();
     $("#tblMeetingItems TBODY TR").each(function () {
         var row = $(this);
-        var customer = {};
-        customer.Name = row.find("TD").eq(0).html();
-        customer.Country = row.find("TD").eq(1).html();
-        customers.push(customer);
+        var item = {};
+        item.MeetingItemName = row.find("TD").eq(0).html();
+        item.ItemDescription = row.find("TD").eq(1).html();
+        item.ActionBy = row.find("TD").eq(2).html();
+        item.ItemStatus = row.find("TD").eq(3).html();
+        item.DueDate = row.find("TD").eq(4).html();
+        meetingItems.push(item);
     });
 
     //Send the JSON array to Controller using AJAX.
     $.ajax({
         type: "POST",
-        url: "/Meeting/AddPreviousMeetingItems",
-        data: JSON.stringify(customers),
+        url: "/Meeting/AddMeetingItems",
+        data: JSON.stringify(meetingItems),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (r) {
-            alert(r + " record(s) inserted.");
+            alert("record(s) inserted.");
+            window.location.pathname = "/Meeting/Index";
         }
     });
 });
